@@ -389,9 +389,30 @@ form {
   gap: 0.36rem;
 }
 
+.field-hint {
+  margin: 0;
+  font-size: 0.84rem;
+  line-height: 1.4;
+  color: #5a6074;
+}
+
+.field-hint.error {
+  color: #a23712;
+  font-weight: 700;
+}
+
 .subsection-title {
   margin-top: 0.1rem;
   font-size: 1.02rem;
+}
+
+.extras-block {
+  display: grid;
+  gap: 0.75rem;
+  padding: 0.9rem;
+  border: 1px solid rgba(20, 27, 39, 0.12);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.72);
 }
 
 .field-grid {
@@ -519,6 +540,21 @@ a:focus-visible {
   min-width: 0;
   word-break: normal;
   overflow-wrap: break-word;
+}
+
+.check-option {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  font-weight: 600;
+  color: #2a2f43;
+  cursor: pointer;
+}
+
+.check-option input {
+  width: auto;
+  margin: 0;
+  flex: 0 0 auto;
 }
 
 .result-panel textarea {

@@ -24,15 +24,6 @@
       </section>
 
       <section class="version-pane is-active" data-version="cn" lang="zh-CN">
-        <header class="hero">
-          <p class="eyebrow">员工优惠购买指引</p>
-          <h1>先看演示，再提交你的购买链接</h1>
-          <p class="hero-copy">
-            下面会自动播放一个简短演示：选择机型、颜色、容量等，直到
-            “加入购物袋”前停下。然后把配置完成的商品链接复制出来并提交给我。
-          </p>
-        </header>
-
         <section class="panel guide-panel">
           <div class="panel-head">
             <h2>购买流程演示</h2>
@@ -109,7 +100,35 @@
                 placeholder="https://www.apple.com.cn/..."
                 required
               />
+              <p
+                class="field-hint url-hint"
+                data-default="请在加入购物袋前，直接复制产品配置页面链接。像 step=attach 这类链接通常不对。"
+              >
+                请在加入购物袋前，直接复制产品配置页面链接。像 step=attach 这类链接通常不对。
+              </p>
             </div>
+
+            <section class="extras-block" aria-labelledby="cnExtrasTitle">
+              <h3 id="cnExtrasTitle" class="subsection-title">额外需求</h3>
+              <label class="check-option">
+                <input class="trade-in-toggle" name="tradeInRequested" type="checkbox" />
+                <span>需要折抵换购</span>
+              </label>
+              <div class="field-group trade-in-model-group" hidden>
+                <label for="cnTradeInModel">折抵设备型号</label>
+                <input
+                  id="cnTradeInModel"
+                  name="tradeInModel"
+                  type="text"
+                  placeholder="例如：iPhone 14 Pro 256GB"
+                  data-optional="true"
+                />
+              </div>
+              <label class="check-option">
+                <input name="appleCareWanted" type="checkbox" />
+                <span>需要 AppleCare+</span>
+              </label>
+            </section>
 
             <div class="segment-control" role="group" aria-labelledby="cnFulfillmentTitle">
               <p id="cnFulfillmentTitle" class="segment-title">选择收货方式</p>
@@ -225,15 +244,6 @@
       </section>
 
       <section class="version-pane" data-version="us" lang="en" hidden>
-        <header class="hero">
-          <p class="eyebrow">Employee Purchase Guide</p>
-          <h1>Watch the guide, then send your Apple product URL</h1>
-          <p class="hero-copy">
-            The animation quickly demonstrates selecting model, color, and storage, then stops
-            right before Add to Bag. Copy that URL and submit it with your address details.
-          </p>
-        </header>
-
         <section class="panel guide-panel">
           <div class="panel-head">
             <h2>Quick purchase walkthrough</h2>
@@ -313,7 +323,35 @@
                 placeholder="https://www.apple.com/..."
                 required
               />
+              <p
+                class="field-hint url-hint"
+                data-default="Copy the product configuration URL before Add to Bag. Links like step=attach are usually too late."
+              >
+                Copy the product configuration URL before Add to Bag. Links like step=attach are usually too late.
+              </p>
             </div>
+
+            <section class="extras-block" aria-labelledby="usExtrasTitle">
+              <h3 id="usExtrasTitle" class="subsection-title">Order extras</h3>
+              <label class="check-option">
+                <input class="trade-in-toggle" name="tradeInRequested" type="checkbox" />
+                <span>Trade in</span>
+              </label>
+              <div class="field-group trade-in-model-group" hidden>
+                <label for="usTradeInModel">Trade-in model</label>
+                <input
+                  id="usTradeInModel"
+                  name="tradeInModel"
+                  type="text"
+                  placeholder="For example: iPhone 14 Pro 256GB"
+                  data-optional="true"
+                />
+              </div>
+              <label class="check-option">
+                <input name="appleCareWanted" type="checkbox" />
+                <span>AppleCare+</span>
+              </label>
+            </section>
 
             <div class="segment-control" role="group" aria-labelledby="usFulfillmentTitle">
               <p id="usFulfillmentTitle" class="segment-title">Choose fulfillment type</p>

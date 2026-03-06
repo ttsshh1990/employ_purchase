@@ -27,6 +27,95 @@ function valueOrDash(value) {
   return value && value.trim() ? value.trim() : "-";
 }
 
+function yesNo(value) {
+  return value ? "YES" : "NO";
+}
+
+function formatExtrasSummary(data, locale) {
+  const tradeIn = Boolean(data.tradeInRequested);
+  const appleCare = Boolean(data.appleCareWanted);
+  const tradeInModel = valueOrDash(data.tradeInModel);
+
+  if (locale === "cn") {
+    return [
+      "",
+      "---- 仅供我参考 ----",
+      `折抵换购 ${tradeIn ? "需要" : "不需要"}${tradeIn && tradeInModel !== "-" ? ` (${tradeInModel})` : ""}`,
+      `AppleCare+ ${appleCare ? "需要" : "不需要"}`
+    ].join("\n");
+  }
+
+  return [
+    "",
+    "---- For my reference ----",
+    `Trade in ${tradeIn ? "YES" : "NO"}${tradeIn && tradeInModel !== "-" ? ` (${tradeInModel})` : ""}`,
+    `AppleCare+ ${appleCare ? "YES" : "NO"}`
+  ].join("\n");
+}
+
+function validateProductUrl(version, rawValue) {
+  const value = (rawValue || "").trim();
+
+  if (!value) {
+    return { valid: true };
+  }
+
+  let url;
+  try {
+    url = new URL(value);
+  } catch (_error) {
+    return {
+      valid: false,
+      message:
+        version === "cn"
+          ? "请输入完整的 Apple 商品链接。"
+          : "Please enter a full Apple product URL."
+    };
+  }
+
+  const hostname = url.hostname.toLowerCase();
+  const pathname = url.pathname.toLowerCase();
+  const step = (url.searchParams.get("step") || "").toLowerCase();
+
+  const validHost =
+    version === "cn"
+      ? /(^|\.)apple\.com\.cn$/.test(hostname)
+      : /(^|\.)apple\.com$/.test(hostname) && !hostname.endsWith(".cn");
+
+  if (!validHost) {
+    return {
+      valid: false,
+      message:
+        version === "cn"
+          ? "请粘贴 Apple 中国官网商品链接。"
+          : "Please paste a product URL from Apple US."
+    };
+  }
+
+  if (!pathname.startsWith("/shop/buy-")) {
+    return {
+      valid: false,
+      message:
+        version === "cn"
+          ? "这看起来不是产品配置页面链接，请从 Apple 商品配置页面直接复制。"
+          : "This does not look like a product configuration page URL. Copy it directly from the Apple product page."
+    };
+  }
+
+  const blockedStep = ["attach", "watchattach", "bag", "checkout"];
+  if (blockedStep.some((token) => step.includes(token)) || pathname.includes("/bag")) {
+    return {
+      valid: false,
+      message:
+        version === "cn"
+          ? "这个链接看起来已经进入加入购物袋后的步骤。请回到加入购物袋前，直接复制当前商品页面链接。"
+          : "This link looks like it is already past the product page. Go back and copy the URL right before Add to Bag."
+    };
+  }
+
+  return { valid: true };
+}
+
 function setSectionRequirements(section, required) {
   const fields = section.querySelectorAll("input, textarea, select");
   fields.forEach((field) => {
@@ -166,7 +255,7 @@ function formatCnMessage(data) {
   }
 
   lines.push("EPP_ORDER_END");
-  return lines.join("\n");
+  return lines.join("\n") + formatExtrasSummary(data, "cn");
 }
 
 function formatUsMessage(data) {
@@ -200,7 +289,7 @@ function formatUsMessage(data) {
   }
 
   lines.push("EPP_ORDER_END");
-  return lines.join("\n");
+  return lines.join("\n") + formatExtrasSummary(data, "us");
 }
 
 function initFormController(pane) {
@@ -211,6 +300,11 @@ function initFormController(pane) {
   const resultPanel = pane.querySelector(".result-panel");
   const messageBox = pane.querySelector(".formatted-message");
   const copyBtn = pane.querySelector(".copy-message-btn");
+  const productUrlInput = form.querySelector('input[name="productUrl"]');
+  const productUrlHint = form.querySelector(".url-hint");
+  const tradeInToggle = form.querySelector(".trade-in-toggle");
+  const tradeInModelGroup = form.querySelector(".trade-in-model-group");
+  const tradeInModelInput = tradeInModelGroup?.querySelector("input");
   const version = form.dataset.version;
 
   function switchFulfillment(type) {
@@ -227,8 +321,41 @@ function initFormController(pane) {
     });
   });
 
+  function syncTradeInFields() {
+    const enabled = Boolean(tradeInToggle?.checked);
+    if (tradeInModelGroup) tradeInModelGroup.hidden = !enabled;
+    if (tradeInModelInput) {
+      if (enabled) {
+        tradeInModelInput.setAttribute("required", "required");
+      } else {
+        tradeInModelInput.removeAttribute("required");
+        tradeInModelInput.value = "";
+      }
+    }
+  }
+
+  tradeInToggle?.addEventListener("change", syncTradeInFields);
+
+  function syncProductUrlValidation() {
+    if (!productUrlInput) return true;
+
+    const { valid, message } = validateProductUrl(version, productUrlInput.value);
+    productUrlInput.setCustomValidity(valid ? "" : message);
+
+    if (productUrlHint) {
+      productUrlHint.textContent = valid ? productUrlHint.dataset.default : message;
+      productUrlHint.classList.toggle("error", !valid);
+    }
+
+    return valid;
+  }
+
+  productUrlInput?.addEventListener("input", syncProductUrlValidation);
+  productUrlInput?.addEventListener("blur", syncProductUrlValidation);
+
   form.addEventListener("submit", (event) => {
     event.preventDefault();
+    syncProductUrlValidation();
     if (!form.checkValidity()) {
       form.reportValidity();
       return;
@@ -259,6 +386,8 @@ function initFormController(pane) {
   });
 
   switchFulfillment("delivery");
+  syncTradeInFields();
+  syncProductUrlValidation();
 }
 
 function switchVersion(version) {
