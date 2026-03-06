@@ -1,0 +1,441 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Employee Purchase Helper</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=Space+Grotesk:wght@500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="page-shell">
+      <section class="panel version-switch" aria-label="Version selector">
+        <button class="version-btn is-active" type="button" data-version="cn" aria-pressed="true">
+          中文版本
+        </button>
+        <button class="version-btn" type="button" data-version="us" aria-pressed="false">
+          US Version
+        </button>
+      </section>
+
+      <section class="version-pane is-active" data-version="cn" lang="zh-CN">
+        <header class="hero">
+          <p class="eyebrow">员工优惠购买指引</p>
+          <h1>先看演示，再提交你的购买链接</h1>
+          <p class="hero-copy">
+            下面会自动播放一个简短演示：选择机型、颜色、容量等，直到
+            “加入购物袋”前停下。然后把配置完成的商品链接复制出来并提交给我。
+          </p>
+        </header>
+
+        <section class="panel guide-panel">
+          <div class="panel-head">
+            <h2>购买流程演示</h2>
+            <button type="button" class="secondary-btn replay-btn">重新播放</button>
+          </div>
+          <div class="guide-frame" aria-live="polite">
+            <div class="guide-video-wrap" hidden>
+              <video class="guide-video" controls muted playsinline preload="metadata">
+                <source src="./assets/guide-demo.mp4" type="video/mp4" />
+                你的浏览器不支持视频播放。
+              </video>
+            </div>
+            <div class="mock-browser guide-fallback">
+              <div class="browser-top">
+                <span class="dot"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+                <div class="address-mock">apple.com.cn/shop/buy-iphone</div>
+              </div>
+              <div class="mock-content">
+                <p class="step-label">步骤 1：打开 iPhone 购买页面</p>
+                <div class="options-grid">
+                  <article class="option-card">
+                    <h3>机型</h3>
+                    <p>iPhone 16 Pro</p>
+                  </article>
+                  <article class="option-card">
+                    <h3>颜色</h3>
+                    <p>原色钛金属</p>
+                  </article>
+                  <article class="option-card">
+                    <h3>存储容量</h3>
+                    <p>256GB</p>
+                  </article>
+                  <article class="option-card">
+                    <h3>版本</h3>
+                    <p>全网通</p>
+                  </article>
+                </div>
+                <div class="url-copy-row">
+                  <span class="url-chip">https://www.apple.com.cn/.../iphone16pro</span>
+                  <span class="copy-badge">复制链接</span>
+                </div>
+                <div class="add-to-bag-row">
+                  <button type="button" class="ghost-disabled" aria-disabled="true">
+                    到这里停止（先不要点加入购物袋）
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <ol class="guide-notes">
+            <li>点击下方按钮打开 Apple 中国官网。</li>
+            <li>完成产品配置，<span class="highlight-stop">停在“加入购物袋”前一步</span>。</li>
+            <li>复制当前链接，粘贴到下面表单并提交。</li>
+          </ol>
+        </section>
+
+        <section class="panel links-panel">
+          <a class="site-btn" href="https://www.apple.com.cn/" target="_blank" rel="noopener noreferrer">
+            打开 Apple 中国官网
+          </a>
+        </section>
+
+        <section class="panel form-panel">
+          <h2>填写订单信息</h2>
+          <form class="order-form" data-version="cn" novalidate>
+            <div class="field-group">
+              <label for="cnProductUrl">配置完成的商品链接</label>
+              <input
+                id="cnProductUrl"
+                name="productUrl"
+                type="url"
+                placeholder="https://www.apple.com.cn/..."
+                required
+              />
+            </div>
+
+            <fieldset class="segment-control">
+              <legend>选择收货方式</legend>
+              <label class="segment-option">
+                <input type="radio" name="fulfillmentType" value="delivery" checked />
+                送货上门
+              </label>
+              <label class="segment-option">
+                <input type="radio" name="fulfillmentType" value="pickup" />
+                到店取货
+              </label>
+            </fieldset>
+
+            <section class="delivery-fields">
+              <div class="field-grid two-col">
+                <div class="field-group">
+                  <label for="cnSurname">姓氏</label>
+                  <input id="cnSurname" name="surname" type="text" required />
+                </div>
+                <div class="field-group">
+                  <label for="cnGivenName">名字</label>
+                  <input id="cnGivenName" name="givenName" type="text" required />
+                </div>
+              </div>
+
+              <div class="field-group">
+                <label for="cnAddressArea">收货地址（省/市/区）</label>
+                <input
+                  id="cnAddressArea"
+                  name="addressArea"
+                  type="text"
+                  placeholder="例如：北京 石景山区"
+                  required
+                />
+              </div>
+
+              <div class="field-group">
+                <label for="cnDetailAddress">详细地址</label>
+                <input id="cnDetailAddress" name="detailAddress" type="text" required />
+              </div>
+
+              <div class="field-group">
+                <label for="cnAdditionalAddress">附加详细地址（选填）</label>
+                <input
+                  id="cnAdditionalAddress"
+                  name="additionalAddress"
+                  type="text"
+                  data-optional="true"
+                />
+              </div>
+
+              <div class="field-group">
+                <label for="cnCountryRegion">国家/地区</label>
+                <input id="cnCountryRegion" name="countryRegion" type="text" value="中国" readonly required />
+              </div>
+
+              <div class="field-group">
+                <label for="cnReceiverPhone">收件人手机号码</label>
+                <div class="phone-input-wrap">
+                  <span class="phone-prefix">+86</span>
+                  <input id="cnReceiverPhone" name="receiverPhone" type="tel" required />
+                </div>
+              </div>
+
+              <div class="field-group">
+                <label for="cnReceiverEmail">邮箱</label>
+                <input id="cnReceiverEmail" name="receiverEmail" type="email" required />
+              </div>
+            </section>
+
+            <section class="pickup-fields" hidden>
+              <h3 class="subsection-title">输入你的联系信息：</h3>
+              <div class="field-group">
+                <label for="cnPickupSurname">姓氏</label>
+                <input id="cnPickupSurname" name="pickupSurname" type="text" />
+              </div>
+              <div class="field-group">
+                <label for="cnPickupGivenName">名字</label>
+                <input id="cnPickupGivenName" name="pickupGivenName" type="text" />
+              </div>
+              <div class="field-group">
+                <label for="cnPickupEmail">电子邮件地址</label>
+                <input id="cnPickupEmail" name="pickupEmail" type="email" />
+              </div>
+              <div class="field-group">
+                <label for="cnPickupContactPhone">联系人手机号码</label>
+                <div class="phone-input-wrap with-suffix">
+                  <span class="phone-prefix">+86</span>
+                  <input id="cnPickupContactPhone" name="pickupContactPhone" type="tel" />
+                  <span class="phone-suffix">验证</span>
+                </div>
+              </div>
+            </section>
+
+            <button type="submit" class="primary-btn">提交</button>
+          </form>
+        </section>
+
+        <section class="panel result-panel" hidden aria-live="polite">
+          <div class="panel-head">
+            <h2>发给我的格式化信息</h2>
+            <button
+              class="secondary-btn copy-message-btn"
+              type="button"
+              data-default-text="复制信息"
+              data-copied-text="已复制"
+            >
+              复制信息
+            </button>
+          </div>
+          <textarea class="formatted-message" rows="14" readonly></textarea>
+        </section>
+      </section>
+
+      <section class="version-pane" data-version="us" lang="en" hidden>
+        <header class="hero">
+          <p class="eyebrow">Employee Purchase Guide</p>
+          <h1>Watch the guide, then send your Apple product URL</h1>
+          <p class="hero-copy">
+            The animation quickly demonstrates selecting model, color, and storage, then stops
+            right before Add to Bag. Copy that URL and submit it with your address details.
+          </p>
+        </header>
+
+        <section class="panel guide-panel">
+          <div class="panel-head">
+            <h2>Quick purchase walkthrough</h2>
+            <button type="button" class="secondary-btn replay-btn">Replay</button>
+          </div>
+          <div class="guide-frame" aria-live="polite">
+            <div class="guide-video-wrap" hidden>
+              <video class="guide-video" controls muted playsinline preload="metadata">
+                <source src="./assets/guide-demo-us.mp4" type="video/mp4" />
+                Your browser does not support video playback.
+              </video>
+            </div>
+            <div class="mock-browser guide-fallback">
+              <div class="browser-top">
+                <span class="dot"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+                <div class="address-mock">apple.com/shop/buy-iphone</div>
+              </div>
+              <div class="mock-content">
+                <p class="step-label">Step 1: Open iPhone page</p>
+                <div class="options-grid">
+                  <article class="option-card">
+                    <h3>Model</h3>
+                    <p>iPhone 16 Pro</p>
+                  </article>
+                  <article class="option-card">
+                    <h3>Color</h3>
+                    <p>Natural Titanium</p>
+                  </article>
+                  <article class="option-card">
+                    <h3>Storage</h3>
+                    <p>256GB</p>
+                  </article>
+                  <article class="option-card">
+                    <h3>Finish</h3>
+                    <p>Unlocked</p>
+                  </article>
+                </div>
+                <div class="url-copy-row">
+                  <span class="url-chip">https://www.apple.com/.../iphone16pro</span>
+                  <span class="copy-badge">Copy URL</span>
+                </div>
+                <div class="add-to-bag-row">
+                  <button type="button" class="ghost-disabled" aria-disabled="true">
+                    Stop here (do not click Add to Bag yet)
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <ol class="guide-notes">
+            <li>Open Apple US from the button below.</li>
+            <li>
+              Configure your product and <span class="highlight-stop">stop right before</span>
+              <strong>Add to Bag</strong>.
+            </li>
+            <li>Copy the URL and submit it in the form.</li>
+          </ol>
+        </section>
+
+        <section class="panel links-panel">
+          <a class="site-btn" href="https://www.apple.com/" target="_blank" rel="noopener noreferrer">
+            Open Apple US
+          </a>
+        </section>
+
+        <section class="panel form-panel">
+          <h2>Submit order details</h2>
+          <form class="order-form" data-version="us" novalidate>
+            <div class="field-group">
+              <label for="usProductUrl">Configured product URL</label>
+              <input
+                id="usProductUrl"
+                name="productUrl"
+                type="url"
+                placeholder="https://www.apple.com/..."
+                required
+              />
+            </div>
+
+            <fieldset class="segment-control">
+              <legend>Choose fulfillment type</legend>
+              <label class="segment-option">
+                <input type="radio" name="fulfillmentType" value="delivery" checked />
+                Delivery Address
+              </label>
+              <label class="segment-option">
+                <input type="radio" name="fulfillmentType" value="pickup" />
+                Pick Up Info
+              </label>
+            </fieldset>
+
+            <section class="delivery-fields">
+              <h3 class="subsection-title">Enter your name and address:</h3>
+              <div class="field-group">
+                <label for="usDeliveryFirstName">First Name</label>
+                <input id="usDeliveryFirstName" name="deliveryFirstName" type="text" required />
+              </div>
+              <div class="field-group">
+                <label for="usDeliveryLastName">Last Name</label>
+                <input id="usDeliveryLastName" name="deliveryLastName" type="text" required />
+              </div>
+              <div class="field-group">
+                <label for="usDeliveryStreetAddress">Street Address</label>
+                <input id="usDeliveryStreetAddress" name="deliveryStreetAddress" type="text" required />
+              </div>
+              <div class="field-group">
+                <label for="usDeliveryStreetAddress2">Apartment, Suite, Building (Optional)</label>
+                <input
+                  id="usDeliveryStreetAddress2"
+                  name="deliveryStreetAddress2"
+                  type="text"
+                  data-optional="true"
+                />
+              </div>
+              <div class="field-grid two-col">
+                <div class="field-group">
+                  <label for="usDeliveryZipCode">Zip Code</label>
+                  <input id="usDeliveryZipCode" name="deliveryZipCode" type="text" required />
+                </div>
+                <div class="field-group">
+                  <label for="usDeliveryCityState">City, State</label>
+                  <input
+                    id="usDeliveryCityState"
+                    name="deliveryCityState"
+                    type="text"
+                    placeholder="Sunnyvale, CA"
+                    required
+                  />
+                </div>
+              </div>
+              <div class="field-group">
+                <label for="usDeliveryCountryRegion">Country/Region</label>
+                <input
+                  id="usDeliveryCountryRegion"
+                  name="deliveryCountryRegion"
+                  type="text"
+                  value="United States"
+                  readonly
+                  required
+                />
+              </div>
+              <div class="field-group">
+                <label for="usDeliveryPhone">Phone Number</label>
+                <input id="usDeliveryPhone" name="deliveryPhone" type="tel" required />
+              </div>
+              <div class="field-group">
+                <label for="usDeliveryEmail">Email Address</label>
+                <input id="usDeliveryEmail" name="deliveryEmail" type="email" required />
+              </div>
+            </section>
+
+            <section class="pickup-fields" hidden>
+              <h3 class="subsection-title">Enter your contact information:</h3>
+              <div class="field-group">
+                <label for="usPickupFirstName">First Name</label>
+                <input id="usPickupFirstName" name="pickupFirstName" type="text" />
+              </div>
+              <div class="field-group">
+                <label for="usPickupLastName">Last Name</label>
+                <input id="usPickupLastName" name="pickupLastName" type="text" />
+              </div>
+              <div class="field-group">
+                <label for="usPickupEmail">Email Address</label>
+                <input id="usPickupEmail" name="pickupEmail" type="email" />
+              </div>
+              <div class="field-group">
+                <label for="usPickupPhone">Phone Number</label>
+                <input id="usPickupPhone" name="pickupPhone" type="tel" />
+              </div>
+              <div class="field-group">
+                <label for="usPickupZipCode">Zip Code</label>
+                <input id="usPickupZipCode" name="pickupZipCode" type="text" />
+              </div>
+              <div class="field-group">
+                <label for="usPickupStoreName">Store Name</label>
+                <input id="usPickupStoreName" name="pickupStoreName" type="text" />
+              </div>
+            </section>
+
+            <button type="submit" class="primary-btn">Submit</button>
+          </form>
+        </section>
+
+        <section class="panel result-panel" hidden aria-live="polite">
+          <div class="panel-head">
+            <h2>Formatted message to send me</h2>
+            <button
+              class="secondary-btn copy-message-btn"
+              type="button"
+              data-default-text="Copy Message"
+              data-copied-text="Copied"
+            >
+              Copy Message
+            </button>
+          </div>
+          <textarea class="formatted-message" rows="14" readonly></textarea>
+        </section>
+      </section>
+    </main>
+
+    <script src="./script.js"></script>
+  </body>
+</html>
