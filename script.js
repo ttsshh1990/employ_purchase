@@ -139,73 +139,67 @@ function buildGuideController(pane, steps) {
 }
 
 function formatCnMessage(data) {
-  const timestamp = new Date().toLocaleString("zh-CN", { hour12: false });
+  const timestamp = new Date().toISOString();
+  const fulfillment = data.fulfillmentType === "delivery" ? "DELIVERY" : "PICKUP";
   const lines = [
-    "[员工采购申请 - 中国区]",
-    `提交时间: ${timestamp}`,
-    "",
-    "[商品信息]",
-    `商品链接: ${valueOrDash(data.productUrl)}`,
-    `收货方式: ${data.fulfillmentType === "delivery" ? "送货上门" : "到店取货"}`,
-    ""
+    "EPP_ORDER_START",
+    `VERSION: CN`,
+    `TIMESTAMP: ${timestamp}`,
+    `FULFILLMENT: ${fulfillment}`,
+    `PRODUCT_URL: ${valueOrDash(data.productUrl)}`
   ];
 
   if (data.fulfillmentType === "delivery") {
-    lines.push("[收货地址]");
-    lines.push(`姓氏: ${valueOrDash(data.surname)}`);
-    lines.push(`名字: ${valueOrDash(data.givenName)}`);
-    lines.push(`收货地址（省/市/区）: ${valueOrDash(data.addressArea)}`);
-    lines.push(`详细地址: ${valueOrDash(data.detailAddress)}`);
-    lines.push(`附加详细地址: ${valueOrDash(data.additionalAddress)}`);
-    lines.push(`国家/地区: ${valueOrDash(data.countryRegion)}`);
-    lines.push(`收件人手机号: ${valueOrDash(data.receiverPhone)}`);
-    lines.push(`邮箱: ${valueOrDash(data.receiverEmail)}`);
-    lines.push("");
+    lines.push(`SURNAME: ${valueOrDash(data.surname)}`);
+    lines.push(`GIVEN_NAME: ${valueOrDash(data.givenName)}`);
+    lines.push(`ADDRESS_AREA: ${valueOrDash(data.addressArea)}`);
+    lines.push(`DETAIL_ADDRESS: ${valueOrDash(data.detailAddress)}`);
+    lines.push(`ADDITIONAL_ADDRESS: ${valueOrDash(data.additionalAddress)}`);
+    lines.push(`COUNTRY_REGION: ${valueOrDash(data.countryRegion)}`);
+    lines.push(`PHONE: ${valueOrDash(data.receiverPhone)}`);
+    lines.push(`EMAIL: ${valueOrDash(data.receiverEmail)}`);
   } else {
-    lines.push("[到店取货联系人]");
-    lines.push(`姓氏: ${valueOrDash(data.pickupSurname)}`);
-    lines.push(`名字: ${valueOrDash(data.pickupGivenName)}`);
-    lines.push(`电子邮件地址: ${valueOrDash(data.pickupEmail)}`);
-    lines.push(`取货人手机号: ${valueOrDash(data.pickupContactPhone)}`);
-    lines.push("");
+    lines.push(`PICKUP_SURNAME: ${valueOrDash(data.pickupSurname)}`);
+    lines.push(`PICKUP_GIVEN_NAME: ${valueOrDash(data.pickupGivenName)}`);
+    lines.push(`PICKUP_EMAIL: ${valueOrDash(data.pickupEmail)}`);
+    lines.push(`PICKUP_PHONE: ${valueOrDash(data.pickupContactPhone)}`);
   }
+
+  lines.push("EPP_ORDER_END");
   return lines.join("\n");
 }
 
 function formatUsMessage(data) {
-  const timestamp = new Date().toLocaleString("en-US");
+  const timestamp = new Date().toISOString();
+  const fulfillment = data.fulfillmentType === "delivery" ? "DELIVERY" : "PICKUP";
   const lines = [
-    "[Employee Purchase Request - US]",
-    `Submitted: ${timestamp}`,
-    "",
-    "[Product]",
-    `URL: ${valueOrDash(data.productUrl)}`,
-    `Fulfillment: ${data.fulfillmentType === "delivery" ? "Delivery" : "Pick Up"}`,
-    ""
+    "EPP_ORDER_START",
+    `VERSION: US`,
+    `TIMESTAMP: ${timestamp}`,
+    `FULFILLMENT: ${fulfillment}`,
+    `PRODUCT_URL: ${valueOrDash(data.productUrl)}`
   ];
 
   if (data.fulfillmentType === "delivery") {
-    lines.push("[Delivery Name and Address]");
-    lines.push(`First Name: ${valueOrDash(data.deliveryFirstName)}`);
-    lines.push(`Last Name: ${valueOrDash(data.deliveryLastName)}`);
-    lines.push(`Street Address: ${valueOrDash(data.deliveryStreetAddress)}`);
-    lines.push(`Apartment/Suite/Building: ${valueOrDash(data.deliveryStreetAddress2)}`);
-    lines.push(`Zip Code: ${valueOrDash(data.deliveryZipCode)}`);
-    lines.push(`City, State: ${valueOrDash(data.deliveryCityState)}`);
-    lines.push(`Country/Region: ${valueOrDash(data.deliveryCountryRegion)}`);
-    lines.push(`Phone Number: ${valueOrDash(data.deliveryPhone)}`);
-    lines.push(`Email Address: ${valueOrDash(data.deliveryEmail)}`);
-    lines.push("");
+    lines.push(`FIRST_NAME: ${valueOrDash(data.deliveryFirstName)}`);
+    lines.push(`LAST_NAME: ${valueOrDash(data.deliveryLastName)}`);
+    lines.push(`STREET_ADDRESS: ${valueOrDash(data.deliveryStreetAddress)}`);
+    lines.push(`ADDRESS_LINE_2: ${valueOrDash(data.deliveryStreetAddress2)}`);
+    lines.push(`ZIP_CODE: ${valueOrDash(data.deliveryZipCode)}`);
+    lines.push(`CITY_STATE: ${valueOrDash(data.deliveryCityState)}`);
+    lines.push(`COUNTRY_REGION: ${valueOrDash(data.deliveryCountryRegion)}`);
+    lines.push(`PHONE: ${valueOrDash(data.deliveryPhone)}`);
+    lines.push(`EMAIL: ${valueOrDash(data.deliveryEmail)}`);
   } else {
-    lines.push("[Pick Up Contact Information]");
-    lines.push(`First Name: ${valueOrDash(data.pickupFirstName)}`);
-    lines.push(`Last Name: ${valueOrDash(data.pickupLastName)}`);
-    lines.push(`Email Address: ${valueOrDash(data.pickupEmail)}`);
-    lines.push(`Phone Number: ${valueOrDash(data.pickupPhone)}`);
-    lines.push(`Zip Code: ${valueOrDash(data.pickupZipCode)}`);
-    lines.push(`Store Name: ${valueOrDash(data.pickupStoreName)}`);
-    lines.push("");
+    lines.push(`PICKUP_FIRST_NAME: ${valueOrDash(data.pickupFirstName)}`);
+    lines.push(`PICKUP_LAST_NAME: ${valueOrDash(data.pickupLastName)}`);
+    lines.push(`PICKUP_EMAIL: ${valueOrDash(data.pickupEmail)}`);
+    lines.push(`PICKUP_PHONE: ${valueOrDash(data.pickupPhone)}`);
+    lines.push(`PICKUP_ZIP_CODE: ${valueOrDash(data.pickupZipCode)}`);
+    lines.push(`PICKUP_STORE_NAME: ${valueOrDash(data.pickupStoreName)}`);
   }
+
+  lines.push("EPP_ORDER_END");
   return lines.join("\n");
 }
 
